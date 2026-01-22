@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Описание команды df</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        pre {
+            background-color: #fafafa;
+            border-radius: 5px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            display: inline-block;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .example {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-left: 5px solid #ccc;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Команда df</h1>
+<p><code>df</code> используется в Linux для отображения информации о свободном месте на файловых системах. Она показывает общий объём, используемый объем и доступное свободное пространство дисков и разделов.</p>
+
+<h2>Примеры использования:</h2>
+
+<h3>Отображение свободного места на всех файловых системах</h3>
+<pre><code class="language-bash">df</code></pre>
+
+<h3>Показать информацию в удобочитаемом формате (гига-, мега- и килобайты)</h3>
+<pre><code class="language-bash">df -h</code></pre>
+
+<h3>Подробная помощь (справка)</h3>
+<pre><code class="language-bash">df --help</code></pre>
+
+<h3>Справочная страница (man)</h3>
+<pre><code class="language-bash">man df</code></pre>
+
+<h2>Использование помощи и документации</h2>
+
+<h3>Результат команды df --help</h3>
+<pre><code class="language-bash">olgar@do4:~/DO4/src$ df --help
+Usage:
+ df [OPTION]... [FILE]...
+
+Show information about the file system where each FILE resides, or all mounted systems if none given.
+
+Mandatory arguments to long options are mandatory for short options too.
+  -a, --all                 include pseudo, duplicate, inaccessible file systems
+  -B, --block-size=SIZE     scale sizes by SIZE before printing them
+  -H                        print sizes in powers of 1000 (for humans)
+  -h, --human-readable      print sizes in human readable format (e.g., 1K 234M 2G)
+  -k                        like --block-size=1K
+  -m                        like --block-size=1M
+  -P, --portability         use the POSIX output format
+  -T, --print-type          print file system type
+  -t TYPE                   limit listing to file systems of type TYPE
+  -x TYPE                   exclude file systems of type TYPE
+  -X DEVICE                 exclude file systems on device DEVICE
+  -Z, --no-sync             do not invoke sync before getting usage info
+      --total               produce a grand total
+      --help                display this help text and exit
+      --version             output version information and exit
+</code></pre>
+
+<h3>Справочная страница (man df)</h3>
+<pre><code class="language-bash">olgar@do4:~/DO4/src$ man df
+DF(1)                           User Commands                          DF(1)
+
+NAME
+       df - report file system disk space usage
+
+SYNOPSIS
+       df [OPTION]... [FILE]
+
+DESCRIPTION
+       Report the amount of disk space available on the file system containing each file argument. If no file is given, then for each mounted file system.
+
+       With no arguments, reports the amount of free and used space on each mounted file system.
+
+OPTIONS
+       -a, --all
+              show all file systems including dummy ones
+
+       -B, --block-size=SIZE
+              specify the block size SIZE in bytes (default is 1K)
+
+       -H, --si
+              print sizes in powers of 1000 (for example, 'MB' means megabytes)
+
+       -h, --human-readable
+              print sizes in human readable format (e.g., 1K 234M 2G)
+
+       -k     like --block-size=1K
+
+       -m     like --block-size=1M
+
+       -P, --portability
+              use the POSIX output format
+
+       -T, --print-type
+              print file system type
+
+       -t TYPE
+              limit listing to file systems of type TYPE
+
+       -x TYPE
+              exclude file systems of type TYPE
+
+       -X DEVICE
+              exclude file systems on DEVICE
+
+       -Z, --no-sync
+              don't invoke sync before getting usage info
+
+       --total
+              produce a grand total
+
+       --help
+              display this help and exit
+
+       --version
+              output version information and exit
+</code></pre>
+
+<p>Таким образом, команда <code>df</code> позволяет удобно отслеживать состояние дискового пространства в вашей операционной системе.</p>
+</body>
+</html>

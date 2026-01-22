@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Описание команды fallocate</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        pre {
+            background-color: #fafafa;
+            border-radius: 5px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .example {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-left: 5px solid #ccc;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Команда fallocate</h1>
+<p><code>fallocate</code> используется в Linux для предварительного выделения места на диске файлу, резервируя указанное количество пространства заранее. Это полезно, когда необходимо обеспечить непрерывное размещение файла на жестком диске для повышения производительности операций чтения-записи.</p>
+
+<h2>Основные варианты использования:</h2>
+
+<h3>Простое выделение блока диска</h3>
+<pre><code class="language-bash">fallocate -l SIZE FILENAME</code></pre>
+<p>Где:</p>
+<ul>
+    <li><strong>SIZE</strong>: размер выделяемого блока (например, 1GB).</li>
+    <li><strong>FILENAME</strong>: имя создаваемого файла.</li>
+</ul>
+<div class="example">
+    Пример:<br/>
+    <pre><code class="language-bash">fallocate -l 1G bigfile.img</code></pre>
+    Создается файл размером ровно 1 гигабайт (<code>bigfile.img</code>), пространство которого сразу выделяется физически на диске.
+</div>
+
+<h3>Освобождение ранее зарезервированного пространства</h3>
+<p>Для освобождения пространства файла (отменяя предварительное распределение):</p>
+<pre><code class="language-bash">fallocate -d FILENAME</code></pre>
+
+<h3>Другие полезные опции:</h3>
+<pre><code class="language-bash">olgar@do4:~/DO4/src$ fallocate --help
+
+Usage:
+ fallocate [options] <filename>
+
+Preallocate space to, or deallocate space from a file.
+
+Options:
+ -c, --collapse-range (свернуть-диапазон) remove a range from the file (удаление диапазона из файла)
+ -d, --dig-holes      (копать-пропуски) detect zeroes and replace with holes (обнаруживать нули и заменять пробелами)
+ -i, --insert-range   (вставить-пропуск) insert a hole at range, shifting existing data (вставлять пробелы в диапазоне, сдвигая существующие данные)
+ -l, --length <num> (длина) length for range operations, in bytes (длина операции над диапазоном, в байтах)
+ -n, --keep-size      (сохранить-размер) maintain the apparent size of the file (поддерживать видимый размер файла неизменным)
+ -o, --offset <num> (смещение) offset for range operations, in bytes (смещение для операций над диапазонами, в байтах)
+ -p, --punch-hole     (пробить-пропуск) replace a range with a hole (implies -n) (замещать диапазон пробелом, подразумевает -n)
+ -z, --zero-range     (нулевой-диапазон) zero and ensure allocation of a range (очистить и гарантировать выделение диапазона)
+ -x, --posix          (POSIX) use posix_fallocate(3) instead of fallocate(2) (использовать POSIX-версию вместо стандартной версии)
+ -v, --verbose        (подробный-вывод) verbose mode (режим подробного вывода)
+
+ -h, --help           display this help
+ -V, --version        display version
+</code></pre>
+
+<h3>Справочная страница (man)</h3>
+<pre><code class="language-bash">olgar@do4:~/DO4/src$ man fallocate
+FALLOCATE(1)                     User Commands                     FALLOCATE(1)
+
+NAME
+       fallocate - preallocate or deallocate space to a file
+
+SYNOPSIS
+       fallocate [-c|-p|-z] [-o offset] -l length [-n] filename
+
+       fallocate -d [-o offset] [-l length] filename
+
+       fallocate -x [-o offset] -l length filename
+
+DESCRIPTION
+       fallocate используется для управления размещенным пространством на диске для файла либо для его удаления, либо для предварительной подготовки. Для файловых систем, поддерживающих системный вызов fallocate, операция предраспределения выполняется быстро путем пометки блоков как неинициализированных, без необходимости ввода-вывода данных. Это значительно быстрее, чем создание файла путём заполнения его нулями.
+
+       Код завершения программы равен 0 при успешном выполнении и 1 при ошибке.
+
+OPTIONS
+       Аргументы длины и смещения могут сопровождаться суффиксами умножения:
+       KiB (=1024), MiB (=1024*1024), и так далее для GiB, TiB, PiB, EiB, ZiB, YiB ("iB" является необязательным, например, "K" означает то же самое, что и "KiB"), или KB (=1000), MB (=1000*1000), и так далее для GB, TB, PB, EB, ZB, YB.
+
+       Опции --collapse-range, --dig-holes, --punch-hole и --zero-range являются взаимоисключающими.
+
+       -c, --collapse-range (свернуть-диапазон)
+              Удаляет диапазон байтов из файла без оставления пустых мест. Диапазон начинается с указанного смещения и продолжается длиной в байтах. После завершения операции содержимое файла начиная с адреса offset+length переносится в позицию offset, уменьшая размер файла на длину удалённого диапазона. Параметр --keep-size не может использоваться совместно с операцией свертывания диапазонов.
+
+              Поддерживается с версии ядра Linux 3.15 для файловой системы ext4 (только для экстентных файлов) и XFS.
+
+              Файловая система может накладывать ограничения на детализацию операции, чтобы обеспечить её эффективное выполнение. Обычно, смещение и длина должны быть кратны размеру логического блока файловой системы.
+
+       -d, --dig-holes (рыть-пропуски)
+              Обнаруживает последовательности нулевых значений и преобразует их в пропуски, освобождая занимаемое ими пространство на диске.
+
+       -i, --insert-range (вставить-пропуск)
+              Вставляет пропуск заданного размера, перемещая существующее содержимое файла вперед.
+
+       -l, --length <num> (длина)
+              Длина диапазона операции в байтах.
+
+       -n, --keep-size (сохранить-размер)
+              Сохраняет внешний видимый размер файла даже при изменении содержимого.
+
+       -o, --offset <num> (смещение)
+              Смещение относительно начала файла для задания начального положения диапазона операции.
+
+       -p, --punch-hole (пробить-пропуск)
+              Преобразует указанный диапазон в пропуск, фактически освобождая дисковое пространство. Подразумевает использование параметра --keep-size (-n).
+
+       -z, --zero-range (нулевой-диапазон)
+              Заполняет указанный диапазон нулями и гарантирует выделение памяти для этого диапазона.
+
+       -x, --posix (POSIX)
+              Использует реализацию системного вызова posix_fallocate() вместо стандартного fallocate().
+
+       -v, --verbose (подробный-вывод)
+              Включает детальные отчёты о ходе выполнения команды.
+
+       -h, --help
+              Показать справку по команде.
+
+       -V, --version
+              Вывести номер версии утилиты.
+</code></pre>
+
+<p>Таким образом, команда <code>fallocate</code> позволяет эффективно управлять распределением файлов на диске, обеспечивая оптимизацию скорости записи и минимизацию фрагментации данных.</p>
+</body>
+</html>
